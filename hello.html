@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>jsonHTML example</title>
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js'></script> <!--MAKE SURE TO INCLUDE JQUERY-->
+  <script type='text/javascript' src='jsonHTML.js'></script> <!-- MAKE SURE TO INCLUDE jsonHTML -->          
+  <script>
+    var childTextBox = $jConstruct('textbox', {
+      text: 'it is amazing',
+    }).css({
+      'color':'pink',
+    })
+
+    var helloDiv = $jConstruct('div', {
+      text: 'Hello World',
+    }).textProperties('heading', '2').textProperties('bold').css({
+      'color': 'purple',
+    }).addChild(childTextBox);
+    
+    $(document).ready(function() {
+      helloDiv.appendTo('body').state.done(function() {
+        console.log('confirmed: page rendered');
+      });
+    });
+  </script>
+</head>
+<body></body>
+</html>
