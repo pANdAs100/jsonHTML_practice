@@ -36,14 +36,13 @@
 //I believe I want the description to be in it's own div in an html paragraph, this will be a child object.
 $(document).ready(function() {
 $.each(dbData, function(indx, data) {
-    var childDescript = $jConstruct('div', {
-      header: 'application/json',
+    var childDescript = sig('div', {
       text: data.email,
     }).textProperties('paragraph').css({
       'margin': '0 auto',
     });
 //parent div will contain the name
-  $jConstruct('div', {
+  sig('div', {
           class: 'defaultClass',
           text: data.name,
       }).css({
@@ -57,5 +56,10 @@ $.each(dbData, function(indx, data) {
   </script>
 </head>
 <body>
+  <div id="hello">No</div>
+  <script>  
+    var no = document.getElementById('hello');
+    no.innerHTML = ("yes " + JSON.stringify(dbData));
+  </script>
 </body>
 </html>
