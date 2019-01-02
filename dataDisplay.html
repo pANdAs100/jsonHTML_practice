@@ -35,16 +35,16 @@
       .then(() => console.log(dbData))
 //I believe I want the description to be in it's own div in an html paragraph, this will be a child object.
 $(document).ready(function() {
-$.each(dbData, function(indx, data) {
+$.each(dbData, function(indx, dbData) {
     var childDescript = sig('div', {
-      text: data.email,
+      text: dbData.email,
     }).textProperties('paragraph').css({
       'margin': '0 auto',
     });
 //parent div will contain the name
   sig('div', {
           class: 'defaultClass',
-          text: data.name,
+          text: dbData.name,
       }).css({
           'color': 'purple', //purple is such a nice color... don't you agree?
           'text-align': 'center',
@@ -56,10 +56,6 @@ $.each(dbData, function(indx, data) {
   </script>
 </head>
 <body>
-  <div id="hello">No</div>
-  <script>  
-    var no = document.getElementById('hello');
-    no.innerHTML = ("yes " + JSON.stringify(dbData));
-  </script>
+  <div id="hello">No/yes</div>
 </body>
 </html>
