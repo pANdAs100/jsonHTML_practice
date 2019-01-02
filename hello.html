@@ -13,14 +13,30 @@
     }).css({
       'color':'pink',
     })
+    
+    //I totally forgot that textProperties was something I added to
+    //jsonHTML, I will look and see why it's not working, but I haven't
+    //found a use for it for quite a while. Here is an alternate method:
 
+    let helloDiv = sig(); //created a div with no properties with sig.
+    let h2 = sig("h2", {  //created the h2, I believe h2's are already bold... hmmm...
+      text: "Hello World"
+    }).css({
+      "color": "purple" //I set the CSS to the h2 directly, you can set it to the div too, but this is usually cleaner.
+    });
+
+    helloDiv.addChild(h2);
+
+/*
     var helloDiv = $jConstruct('div', {
       text: 'Hello World',
     }).textProperties('heading', '2').textProperties('bold').css({
       'color': 'purple',
     }).addChild(childTextBox);
+
+*/
     
-    $(document).ready(function() {
+    $(document).ready(() => { //try the forward arrow when declaring a function, it's awesome, and fast!
       helloDiv.appendTo('body').state.done(function() {
         console.log('confirmed: page rendered');
       });
