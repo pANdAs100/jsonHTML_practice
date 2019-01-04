@@ -1,61 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Displaying the data</title>
-  <script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js'></script> <!--MAKE SURE TO INCLUDE JQUERY-->
-  <script type='text/javascript' src='jsonHTML.js'></script> <!-- MAKE SURE TO INCLUDE jsonHTML -->          
+  <script type='text/javascript' src='http://code.jquery.com/jquery-1.10.2.min.js'></script>
+  <!--MAKE SURE TO INCLUDE JQUERY-->
+  <script type='text/javascript' src='jsonHTML.js'></script> <!-- MAKE SURE TO INCLUDE jsonHTML -->
   <script>
-  // var dbData = [
-  //   {
-  //     name: 'Jarblon',
-  //     Description: 'Jarblon loves Jarblonins',
-  //   },
-  //   {
-  //     name: 'Karrot',
-  //     Description: 'Karrot loves Dolphin back riding',
-  //   },
-  //   {
-  //     name: 'Yoseph',
-  //     Description: 'Yoseph likes to swim',
-  //   },
-  // ]
-  //   console.log(dbData);
+    // var dbData = [
+    //   {
+    //     name: 'Jarblon',
+    //     Description: 'Jarblon loves Jarblonins',
+    //   },
+    //   {
+    //     name: 'Karrot',
+    //     Description: 'Karrot loves Dolphin back riding',
+    //   },
+    //   {
+    //     name: 'Yoseph',
+    //     Description: 'Yoseph likes to swim',
+    //   },
+    // ]
+    //   console.log(dbData);
 
-  var dbData = [];
-    fetch('https://jsonplaceholder.typicode.com/users')
-      .then(response => {
-        return response.json();
-      })
-      .then(users => {
-        dbData = users;
-      })
-      .then(() => console.log(dbData))
-//I believe I want the description to be in it's own div in an html paragraph, this will be a child object.
-$(document).ready(function() {
-$.each(dbData, function(indx, dbData) {
-    var childDescript = sig('div', {
-      text: dbData.email,
-    }).textProperties('paragraph').css({
-      'margin': '0 auto',
+      /*
+        SOLUTION!!!!!
+        fetch is an async function. Your loop that goes through dbData was executing before
+        your fetch function was done.
+        I placed fetch in it's own function, and set a deferred on it, and your loop will
+        execute depending on if fetchData is ready or not.
+      */
+
+
+    //var dbData = [];
+    let fetchData = () => {
+      let dfd = $.Deferred();
+
+      fetch('https://jsonplaceholder.typicode.com/users')
+        .then(response => {
+          return response.json();
+        })
+        .then(users => {
+          dfd.resolve(users);
+        })
+        //.then(() => console.log(dbData))
+
+      return dfd.promise();
+    }
+
+    //I believe I want the description to be in it's own div in an html paragraph, this will be a child object.
+    $(document).ready(function () {
+      fetchData().done((data) => { //waits until fetch is done.
+        console.log(data);
+
+        let container = sig();
+
+        data.map((dbData) => { //$.each is fine too, I just thought you might want to see this method too.
+          console.log(dbData);
+
+          var childDescript = sig('div', {
+            text: dbData.email,
+          }).css({
+            'margin': '0 auto',
+          });
+
+          //parent div will contain the name
+          let obj = sig('div', {
+            class: 'defaultClass',
+            text: dbData.name,
+          }).css({
+            'color': 'purple', //purple is such a nice color... don't you agree?
+            'text-align': 'center',
+            'border': '1px solid black',
+            'border-radius': '15px', //I want the border to look pretty!
+          }).addChild(childDescript); 
+
+          container.addChild(obj);
+        });
+
+        container.appendTo("body");
+
+      });
     });
-//parent div will contain the name
-  sig('div', {
-          class: 'defaultClass',
-          text: dbData.name,
-      }).css({
-          'color': 'purple', //purple is such a nice color... don't you agree?
-          'text-align': 'center',
-          'border': '1px solid black',
-          'border-radius': '15px', //I want the border to look pretty!
-      }).addChild(childDescript).appendTo('body'); //add the child object and append it to the root div of the DOM.
-  });  
-});
   </script>
 </head>
+
 <body>
   <div id="hello">No/yes</div>
 </body>
+
 </html>
